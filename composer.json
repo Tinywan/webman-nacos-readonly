@@ -8,7 +8,6 @@
     "php": ">=7.4",
     "ext-json": "*",
     "workerman/webman-framework": "^1.2.1",
-    "yansongda/supports": "~3.2.0",
     "guzzlehttp/guzzle": "^6.5|^7.0"
   },
   "autoload": {
@@ -25,7 +24,6 @@
     "workerman/webman": "^1.0",
     "phpstan/phpstan": "^1.4",
     "friendsofphp/php-cs-fixer": "^3.6",
-    "phpunit/phpunit": "^9.5",
-    "guzzlehttp/guzzle": "^7.0"
+    "phpunit/phpunit": "^9.5"
   }
 }
