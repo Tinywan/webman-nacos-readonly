@@ -13,7 +13,6 @@ namespace Tinywan\Nacos\Provider;
 
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Psr\Http\Message\ResponseInterface;
 
 class ConfigProvider extends AbstractProvider
 {
@@ -22,11 +21,11 @@ class ConfigProvider extends AbstractProvider
      * @param string $dataId
      * @param string $group
      * @param string|null $tenant
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function get(string $dataId, string $group, ?string $tenant = null): ResponseInterface
+    public function get(string $dataId, string $group, ?string $tenant = null)
     {
         return $this->request('GET', 'nacos/v1/cs/configs', [
             RequestOptions::QUERY => $this->filter([
@@ -44,11 +43,11 @@ class ConfigProvider extends AbstractProvider
      * @param string $content
      * @param string|null $type
      * @param string|null $tenant
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function set(string $dataId, string $group, string $content, ?string $type = null, ?string $tenant = null): ResponseInterface
+    public function set(string $dataId, string $group, string $content, ?string $type = null, ?string $tenant = null)
     {
         return $this->request('POST', 'nacos/v1/cs/configs', [
             RequestOptions::FORM_PARAMS => $this->filter([
@@ -66,11 +65,11 @@ class ConfigProvider extends AbstractProvider
      * @param string $dataId
      * @param string $group
      * @param string|null $tenant
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function delete(string $dataId, string $group, ?string $tenant = null): ResponseInterface
+    public function delete(string $dataId, string $group, ?string $tenant = null)
     {
         return $this->request('DELETE', 'nacos/v1/cs/configs', [
             RequestOptions::QUERY => $this->filter([

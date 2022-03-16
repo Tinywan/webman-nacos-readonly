@@ -29,10 +29,10 @@ class InstanceProvider extends AbstractProvider
      *     'enabled' => true,
      *     'ephemeral' => false, // 是否临时实例
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function register(string $ip, int $port, string $serviceName, array $optional = []): ResponseInterface
+    public function register(string $ip, int $port, string $serviceName, array $optional = [])
     {
         return $this->request('POST', 'nacos/v1/ns/instance', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
@@ -53,10 +53,10 @@ class InstanceProvider extends AbstractProvider
      *     'namespaceId' => '',
      *     'ephemeral' => false,
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function delete(string $serviceName, string $groupName, string $ip, int $port, array $optional = []): ResponseInterface
+    public function delete(string $serviceName, string $groupName, string $ip, int $port, array $optional = [])
     {
         return $this->request('DELETE', 'nacos/v1/ns/instance', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
@@ -81,10 +81,10 @@ class InstanceProvider extends AbstractProvider
      *     'enabled' => false,
      *     'ephemeral' => false,
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function update(string $ip, int $port, string $serviceName, array $optional = []): ResponseInterface
+    public function update(string $ip, int $port, string $serviceName, array $optional = [])
     {
         return $this->request('PUT', 'nacos/v1/ns/instance', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
@@ -103,10 +103,10 @@ class InstanceProvider extends AbstractProvider
      *     'clusters' => '', // 集群名称(字符串，多个集群用逗号分隔)
      *     'healthyOnly' => false,
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function list(string $serviceName, array $optional = []): ResponseInterface
+    public function list(string $serviceName, array $optional = [])
     {
         return $this->request('GET', 'nacos/v1/ns/instance/list', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
@@ -126,10 +126,10 @@ class InstanceProvider extends AbstractProvider
      *     'healthyOnly' => false,
      *     'ephemeral' => false,
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function detail(string $ip, int $port, string $serviceName, array $optional = []): ResponseInterface
+    public function detail(string $ip, int $port, string $serviceName, array $optional = [])
     {
         return $this->request('GET', 'nacos/v1/ns/instance', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
@@ -153,10 +153,10 @@ class InstanceProvider extends AbstractProvider
      * @param string|null $namespaceId
      * @param bool|null $ephemeral
      * @param bool $lightBeatEnabled
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function beat(string $serviceName, array $beat = [], ?string $groupName = null, ?string $namespaceId = null, ?bool $ephemeral = null, bool $lightBeatEnabled = false): ResponseInterface
+    public function beat(string $serviceName, array $beat = [], ?string $groupName = null, ?string $namespaceId = null, ?bool $ephemeral = null, bool $lightBeatEnabled = false)
     {
         return $this->request('PUT', 'nacos/v1/ns/instance/beat', [
             RequestOptions::QUERY => $this->filter([
@@ -181,10 +181,10 @@ class InstanceProvider extends AbstractProvider
      *     'groupName' => '',
      *     'clusterName' => '',
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function updateHealth(string $ip, int $port, string $serviceName, bool $healthy, array $optional = []): ResponseInterface
+    public function updateHealth(string $ip, int $port, string $serviceName, bool $healthy, array $optional = [])
     {
         return $this->request('PUT', 'nacos/v1/ns/health/instance', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [

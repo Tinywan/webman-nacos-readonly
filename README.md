@@ -1,24 +1,27 @@
-# nacos
+# webman nacos plugin
 
+## 安装
 
-## 步骤
+```php
+composer require tinywan/nacos
+```
 
-- 封装HTTP请求类Rocket
-- 无权限请求第一个接口
+## 基本用法
 
-## 基础
+```php
+use Tinywan\Storage\Storage;
+use Tinywan\Storage\Exception\StorageException;
 
-- `__toString()` 方法用于一个类被当成字符串时应怎样回应。例如 echo $obj; 应该显示些什么。
-  > 警告：在 PHP 7.4.0 之前不能在 __toString() 方法中抛出异常。这么做会导致致命错误。
-- `__invoke()` 当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用。
-- `__callStatic()` 在静态上下文中调用一个不可访问方法时，__callStatic() 会被调用。
-
-## 基本概念
-
-- 服务注册 Service
-- 服务发现 Service
-- 发布配置 Service
-- 获取配置 Service
+try {
+    // 初始化
+    Storage::config(); // 默认为本地存储：local
+    // 上传
+    $res = Storage::uploadFile();
+    var_dump(json_encode($res));
+}catch (StorageException $exception) {
+    var_dump($exception->getMessage());
+}
+```
 
 ## OpenAPI
 
@@ -56,3 +59,9 @@
   - [修改命名空间](https://nacos.io/zh-cn/docs/open-api.html#3.3)
   - [删除命名空间](https://nacos.io/zh-cn/docs/open-api.html#3.4)
 
+## Other
+
+- `__toString()` 方法用于一个类被当成字符串时应怎样回应。例如 echo $obj; 应该显示些什么。
+  > 警告：在 PHP 7.4.0 之前不能在 __toString() 方法中抛出异常。这么做会导致致命错误。
+- `__invoke()` 当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用。
+- `__callStatic()` 在静态上下文中调用一个不可访问方法时，__callStatic() 会被调用。
