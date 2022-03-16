@@ -113,8 +113,12 @@ abstract class AbstractProvider
         if ($statusCode !== 200) {
             throw new RequestException($contents, $statusCode);
         }
-        // return Json::decode($contents);
-        return json_decode($contents);
+        try {
+            $decode = json_decode($contents, true, 512, 0 | JSON_THROW_ON_ERROR);
+        } catch (\Throwable $exception) {
+            throw new \InvalidArgumentException($exception->getMessage(), $exception->getCode());
+        }
+        return $decode;
     }
 
     /**
