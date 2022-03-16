@@ -18,10 +18,11 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use Tinywan\Nacos\Nacos;
 use Tinywan\Nacos\Traits\Authentication;
+use Tinywan\Nacos\Traits\ErrorMsg;
 
 abstract class AbstractProvider
 {
-    use Authentication;
+    use Authentication, ErrorMsg;
 
     /**
      * @var string
@@ -61,15 +62,27 @@ abstract class AbstractProvider
      * @param string $method
      * @param string $uri
      * @param array $options
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function request(string $method, string $uri, array $options = []): ResponseInterface
+    public function request(string $method, string $uri, array $options = [])
     {
-        $token = $this->issueToken();
-        $token && $options[RequestOptions::QUERY]['accessToken'] = $token;
-        return $this->client()->request($method, $uri, $options);
+        try {
+            $token = $this->issueToken();
+            $token && $options[RequestOptions::QUERY]['accessToken'] = $token;
+            $response = $this->client()->request($method, $uri, $options);
+        }catch (RequestException $exception){
+            if ($exception->hasResponse()) {
+                if (200 != $exception->getResponse()->getStatusCode()) {
+                    $jsonStr = $exception->getResponse()->getBody()->getContents();
+                    $content = json_decode($jsonStr, true);
+                    return $this->setError(false, '温馨提示：' . $content['msg'] ?? '未知的错误信息');
+                }
+            }
+            return $this->setError(false, '服务端提示：' . $exception->getMessage());
+        }
+        return $response->getBody()->getContents();
     }
 
     /**
@@ -83,21 +96,6 @@ abstract class AbstractProvider
             'base_uri' => sprintf('http://%s:%d', $this->host ?? '127.0.0.1', $this->port ?? 8848),
         ];
         return new Client($config);
-    }
-
-    /**
-     * @desc: 方法描述
-     * @param ResponseInterface $response
-     * @return bool
-     * @author Tinywan(ShaoBo Wan)
-     */
-    protected function checkResponseIsOk(ResponseInterface $response): bool
-    {
-        if ($response->getStatusCode() !== 200) {
-            return false;
-        }
-
-        return (string) $response->getBody() === 'ok';
     }
 
     /**
