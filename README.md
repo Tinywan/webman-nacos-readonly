@@ -16,7 +16,7 @@ composer require tinywan/nacos
 
 ### 配置
 
-#### 获取
+#### 获取配置
 ```php
 use Tinywan\Nacos\Nacos;
 
@@ -27,7 +27,7 @@ if (false === $response) {
 }
 ```
 
-#### 设置
+#### 发布配置
 
 ```php
 use Tinywan\Nacos\Nacos;
@@ -43,6 +43,13 @@ $response = $nacos->config->set('aliyun', 'DEFAULT_GROUP',json_encode($content))
 if (false === $response) {
     var_dump($nacos->config->getMessage());
 }
+```
+
+### 实例
+
+#### 注册实例
+```php
+$response = $nacos->instance->register('127.0.0.1', 8888,'webman-admin',['author' => 'webman','age' => 24]);
 ```
 
 ## OpenAPI
