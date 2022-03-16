@@ -1,0 +1,35 @@
+{
+  "name": "tinywan/nacos",
+  "description": "webman nacos plugin",
+  "keywords": ["webman", "nacos", "plugin"],
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.4",
+    "ext-json": "*",
+    "workerman/webman-framework": "^1.2.1",
+    "yansongda/supports": "~3.2.0",
+    "psr/event-dispatcher": "^1.0",
+    "psr/log": "^1.1 | ^2.0 | ^3.0",
+    "psr/container": "^1.1 | ^2.0",
+    "psr/http-client": "^1.0",
+    "psr/http-message": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tinywan\\Nacos\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tinywan\\Nacos\\Tests\\": "tests"
+    }
+  },
+  "require-dev": {
+    "workerman/webman": "^1.0",
+    "phpstan/phpstan": "^1.4",
+    "friendsofphp/php-cs-fixer": "^3.6",
+    "phpunit/phpunit": "^9.5",
+    "guzzlehttp/guzzle": "^7.0"
+  }
+}
