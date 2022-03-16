@@ -49,7 +49,19 @@ if (false === $response) {
 
 #### 注册实例
 ```php
-$response = $nacos->instance->register('127.0.0.1', 8888,'webman-admin',['author' => 'webman','age' => 24]);
+use Tinywan\Nacos\Nacos;
+
+$nacos = new Nacos();
+$optional = [
+    'groupName' => 'webman-group',
+    'clusterName' => 'webman',
+    'namespaceId' => 'webman',
+    'weight' => 99.0,
+    'metadata' => '',
+    'enabled' => true,
+    'ephemeral' => false
+];
+$response = $nacos->instance->register('127.0.0.1', 8888,'webman-admin',$optional);
 ```
 
 ## OpenAPI
