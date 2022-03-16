@@ -25,10 +25,10 @@ class ServiceProvider extends AbstractProvider
      *     'metadata' => '',
      *     'selector' => '', // json字符串
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function create(string $serviceName, array $optional = []): ResponseInterface
+    public function create(string $serviceName, array $optional = [])
     {
         return $this->request('POST', 'nacos/v1/ns/service', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
@@ -42,11 +42,11 @@ class ServiceProvider extends AbstractProvider
      * @param string $serviceName
      * @param string|null $groupName
      * @param string|null $namespaceId
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function delete(string $serviceName, ?string $groupName = null, ?string $namespaceId = null): ResponseInterface
+    public function delete(string $serviceName, ?string $groupName = null, ?string $namespaceId = null)
     {
         return $this->request('DELETE', 'nacos/v1/ns/service', [
             RequestOptions::QUERY => $this->filter([
@@ -66,10 +66,10 @@ class ServiceProvider extends AbstractProvider
      *     'metadata' => '',
      *     'selector' => '', // json字符串
      * ]
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      */
-    public function update(string $serviceName, array $optional = []): ResponseInterface
+    public function update(string $serviceName, array $optional = [])
     {
         return $this->request('PUT', 'nacos/v1/ns/service', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
@@ -83,11 +83,11 @@ class ServiceProvider extends AbstractProvider
      * @param string $serviceName
      * @param string|null $groupName
      * @param string|null $namespaceId
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function detail(string $serviceName, ?string $groupName = null, ?string $namespaceId = null): ResponseInterface
+    public function detail(string $serviceName, ?string $groupName = null, ?string $namespaceId = null)
     {
         return $this->request('GET', 'nacos/v1/ns/service', [
             RequestOptions::QUERY => $this->filter([
@@ -104,11 +104,11 @@ class ServiceProvider extends AbstractProvider
      * @param int $pageSize
      * @param string|null $groupName
      * @param string|null $namespaceId
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function list(int $pageNo, int $pageSize, ?string $groupName = null, ?string $namespaceId = null): ResponseInterface
+    public function list(int $pageNo, int $pageSize, ?string $groupName = null, ?string $namespaceId = null)
     {
         return $this->request('GET', 'nacos/v1/ns/service/list', [
             RequestOptions::QUERY => $this->filter([

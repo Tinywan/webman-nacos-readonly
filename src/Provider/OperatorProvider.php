@@ -18,11 +18,11 @@ class OperatorProvider extends AbstractProvider
 {
     /**
      * @desc: 方法描述
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function getSwitches(): ResponseInterface
+    public function getSwitches()
     {
         return $this->request('GET', 'nacos/v1/ns/operator/switches');
     }
@@ -32,11 +32,11 @@ class OperatorProvider extends AbstractProvider
      * @param string $entry
      * @param string $value
      * @param bool|null $debug
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function updateSwitches(string $entry, string $value, ?bool $debug = null): ResponseInterface
+    public function updateSwitches(string $entry, string $value, ?bool $debug = null)
     {
         return $this->request('PUT', 'nacos/v1/ns/operator/switches', [
             RequestOptions::QUERY => $this->filter([
@@ -49,11 +49,11 @@ class OperatorProvider extends AbstractProvider
 
     /**
      * @desc: 方法描述
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function getMetrics(): ResponseInterface
+    public function getMetrics()
     {
         return $this->request('GET', 'nacos/v1/ns/operator/metrics');
     }
@@ -61,11 +61,11 @@ class OperatorProvider extends AbstractProvider
     /**
      * @desc: 方法描述
      * @param bool|null $healthy
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function getServers(?bool $healthy = null): ResponseInterface
+    public function getServers(?bool $healthy = null)
     {
         return $this->request('GET', 'nacos/v1/ns/operator/servers', [
             RequestOptions::QUERY => $this->filter([
@@ -76,11 +76,11 @@ class OperatorProvider extends AbstractProvider
 
     /**
      * @desc: 方法描述
-     * @return ResponseInterface
+     * @return bool|string
      * @throws GuzzleException
      * @author Tinywan(ShaoBo Wan)
      */
-    public function getLeader(): ResponseInterface
+    public function getLeader()
     {
         return $this->request('GET', 'nacos/v1/ns/raft/leader');
     }

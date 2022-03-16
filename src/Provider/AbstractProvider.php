@@ -75,9 +75,7 @@ abstract class AbstractProvider
         }catch (RequestException $exception){
             if ($exception->hasResponse()) {
                 if (200 != $exception->getResponse()->getStatusCode()) {
-                    $jsonStr = $exception->getResponse()->getBody()->getContents();
-                    $content = json_decode($jsonStr, true);
-                    return $this->setError(false, '温馨提示：' . $content['msg'] ?? '未知的错误信息');
+                    return $this->setError(false, $exception->getResponse()->getBody()->getContents());
                 }
             }
             return $this->setError(false, '服务端提示：' . $exception->getMessage());

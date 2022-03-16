@@ -1,5 +1,11 @@
 # webman nacos plugin
 
+[![Latest Stable Version](http://poser.pugx.org/tinywan/nacos/v)](https://packagist.org/packages/tinywan/nacos) 
+[![Total Downloads](http://poser.pugx.org/tinywan/nacos/downloads)](https://packagist.org/packages/tinywan/nacos) 
+[![Latest Unstable Version](http://poser.pugx.org/tinywan/nacos/v/unstable)](https://packagist.org/packages/tinywan/nacos) 
+[![License](http://poser.pugx.org/tinywan/nacos/license)](https://packagist.org/packages/tinywan/nacos) 
+[![PHP Version Require](http://poser.pugx.org/tinywan/nacos/require/php)](https://packagist.org/packages/tinywan/nacos)
+
 ## 安装
 
 ```php
@@ -9,18 +15,14 @@ composer require tinywan/nacos
 ## 基本用法
 
 ```php
-use Tinywan\Storage\Storage;
-use Tinywan\Storage\Exception\StorageException;
+use Tinywan\Nacos\Nacos;
 
-try {
-    // 初始化
-    Storage::config(); // 默认为本地存储：local
-    // 上传
-    $res = Storage::uploadFile();
-    var_dump(json_encode($res));
-}catch (StorageException $exception) {
-    var_dump($exception->getMessage());
+$nacos = new Nacos();
+$response = $nacos->config->get('database', 'DEFAULT_GROUP');
+if (false === $response) {
+    var_dump($nacos->config->getMessage());
 }
+var_dump($response);
 ```
 
 ## OpenAPI
