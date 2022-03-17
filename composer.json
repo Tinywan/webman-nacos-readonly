@@ -6,7 +6,6 @@
   "license": "MIT",
   "require": {
     "php": ">=7.4",
-    "ext-json": "*",
     "workerman/webman-framework": "^1.2.1",
     "guzzlehttp/guzzle": "^6.5|^7.0"
   },
