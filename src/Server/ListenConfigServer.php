@@ -23,8 +23,8 @@ class ListenConfigServer
     {
         $config = config('plugin.tinywan.nacos.app.nacos');
         if ($config['is_config_listen']) {
-            Timer::add(1, function () use ($config) {
-                $taskWork = new AsyncTcpConnection('text://127.0.0.1:9511');
+            Timer::add($config['listen_timer_interval'], function () use ($config) {
+                $taskWork = new AsyncTcpConnection($config['listen_text_address']);
                 $listenList = $config['config_listen_list'];
                 if ($listenList) {
                     foreach ($listenList as $listen) {

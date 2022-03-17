@@ -12,7 +12,7 @@ return [
     // 自定义Text协议
     'listen.text.protocol' => [
         'handler'=> NacosListenTextProtocol::class,
-        'listen' => 'text://0.0.0.0:9511',
+        'listen' => config('plugin.tinywan.nacos.app.nacos.listen_text_address'),
         'count'  => 10, // 根据配置文件调整
     ],
     'listen.config.server' => [
