@@ -34,7 +34,7 @@ class NacosListenTextProtocol
             if (false === $content) {
                 var_dump( $nacos->config->getMessage());
             }
-            // 这里会被阻塞的
+            // 阻塞数秒
             $response = $nacos->config->listen($dataId, $group,md5($content),$tenant);
             if (false === $response) {
                 var_dump($nacos->config->getMessage());
