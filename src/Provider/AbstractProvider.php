@@ -25,6 +25,11 @@ abstract class AbstractProvider
     use Authentication, ErrorMsg;
 
     /**
+     * @var Nacos
+     */
+    protected Nacos $nacos;
+
+    /**
      * @var string
      */
     protected string $host = '127.0.0.1';
@@ -50,6 +55,7 @@ abstract class AbstractProvider
      */
     public function __construct(Nacos $nacos)
     {
+        $this->nacos = $nacos;
         $config = config('plugin.tinywan.nacos.app.nacos');
         isset($config['host']) && $this->host = (string) $config['host'];
         isset($config['port']) && $this->port = (int) $config['port'];

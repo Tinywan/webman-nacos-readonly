@@ -12,13 +12,15 @@ namespace Tinywan\Nacos\Provider;
 
 
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
+use Tinywan\Nacos\Exception\NacosAuthException;
 
 class AuthProvider extends AbstractProvider
 {
     /**
-     * @desc: 方法描述
+     * @desc: 授权登录
      * @param string $username
      * @param string $password
      * @return ResponseInterface
@@ -27,13 +29,21 @@ class AuthProvider extends AbstractProvider
      */
     public function login(string $username, string $password): ResponseInterface
     {
-        return $this->client()->request('POST', 'nacos/v1/auth/users/login', [
-            RequestOptions::QUERY => [
-                'username' => $username,
-            ],
-            RequestOptions::FORM_PARAMS => [
-                'password' => $password,
-            ],
-        ]);
+        try {
+            $response = $this->client()->request('POST', 'nacos/v1/auth/users/login', [
+                RequestOptions::QUERY => [
+                    'username' => $username,
+                ],
+                RequestOptions::FORM_PARAMS => [
+                    'password' => $password,
+                ],
+            ]);
+        }catch (RequestException $exception) {
+            if (403 === $exception->getCode()) {
+                throw new NacosAuthException('Nacos服务端鉴权失败，'.$exception->getResponse()->getBody()->getContents());
+            }
+            throw new NacosAuthException($exception->getMessage(),$exception->getCode());
+        }
+        return $response;
     }
 }

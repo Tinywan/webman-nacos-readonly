@@ -14,6 +14,35 @@ composer require tinywan/nacos
 
 ## 基本用法
 
+### 认证
+
+Docker环境，添加环境变量 `NACOS_AUTH_ENABLE=true`（默认该值为false）
+
+```php
+use Tinywan\Nacos\Nacos;
+
+$nacos = new Nacos();
+$login = $nacos->auth->login('nacos', 'nacos');
+var_dump($login->getBody()->getContents());
+```
+
+#### 认证成功
+
+若用户名和密码正确,返回信息如下
+
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYWNvcyIsImV4cCI6MTY0NzUwMzcxMX0.m1p2WKSz1TNj3ftUgKSJuj7Yu4SdoQiV-k0rm6IbvFg",
+  "tokenTtl": 18000,
+  "globalAdmin": true,
+  "username": "nacos"
+}
+```
+
+#### 认证失败
+
+403
+
 ### 配置
 
 #### 获取配置
@@ -63,6 +92,10 @@ $optional = [
 ];
 $response = $nacos->instance->register('127.0.0.1', 8888,'webman-admin',$optional);
 ```
+
+## 鉴权
+
+https://nacos.io/zh-cn/docs/auth.html
 
 ## OpenAPI
 
