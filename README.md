@@ -67,7 +67,7 @@ $content = [
     'context' => [],
     'name' => 'webman-admin',
 ];
-$response = $nacos->config->set('aliyun', 'DEFAULT_GROUP',json_encode($content));
+$response = $nacos->config->publish('aliyun', 'DEFAULT_GROUP',json_encode($content));
 if (false === $response) {
     var_dump($nacos->config->getMessage());
 }
