@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-
 namespace Tinywan\Nacos\Provider;
 
 use GuzzleHttp\Exception\GuzzleException;
@@ -166,7 +165,7 @@ class InstanceProvider extends AbstractProvider
                 'groupName' => $groupName,
                 'namespaceId' => $namespaceId,
                 'ephemeral' => $ephemeral,
-                'beat' => ! $lightBeatEnabled ? Json::encode($beat) : '',
+                'beat' => ! $lightBeatEnabled ? json_encode($beat) : '',
             ]),
         ]);
     }

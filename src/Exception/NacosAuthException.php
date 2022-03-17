@@ -7,11 +7,8 @@
 
 declare(strict_types=1);
 
-
 namespace Tinywan\Nacos\Exception;
-
 
 class NacosAuthException extends \RuntimeException
 {
-
 }

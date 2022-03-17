@@ -7,9 +7,7 @@
 
 declare(strict_types=1);
 
-
 namespace Tinywan\Nacos;
-
 
 use Tinywan\Nacos\Provider\AuthProvider;
 use Tinywan\Nacos\Provider\ConfigProvider;

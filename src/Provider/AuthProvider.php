@@ -7,9 +7,7 @@
 
 declare(strict_types=1);
 
-
 namespace Tinywan\Nacos\Provider;
-
 
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -38,11 +36,11 @@ class AuthProvider extends AbstractProvider
                     'password' => $password,
                 ],
             ]);
-        }catch (RequestException $exception) {
+        } catch (RequestException $exception) {
             if (403 === $exception->getCode()) {
                 throw new NacosAuthException('Nacos服务端鉴权失败，'.$exception->getResponse()->getBody()->getContents());
             }
-            throw new NacosAuthException($exception->getMessage(),$exception->getCode());
+            throw new NacosAuthException($exception->getMessage(), $exception->getCode());
         }
         return $response;
     }

@@ -1,14 +1,15 @@
 <?php
+
 namespace Tinywan\Nacos;
 
 class Install
 {
-    const WEBMAN_PLUGIN = true;
+    public const WEBMAN_PLUGIN = true;
 
     /**
      * @var array
      */
-    protected static $pathRelation = array (
+    protected static $pathRelation = array(
       'config/plugin/tinywan/nacos' => 'config/plugin/tinywan/nacos',
     );
 
@@ -68,5 +69,4 @@ class Install
             remove_dir($path);
         }
     }
-    
 }

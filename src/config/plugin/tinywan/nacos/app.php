@@ -1,10 +1,16 @@
 <?php
+
 return [
     'enable' => true,
     'nacos' => [
-        'host' => '127.0.0.1',
+        'host' => 'dnmp-nacos',
         'port' => 8848,
-        'username' => null,
-        'password' => null,
+        'username' => 'nacos',
+        'password' => 'nacos',
+        'long_pulling_timeout' => 30000, // 长轮训等待 30s，此处填写 30000
+        'is_config_listen' => false, // 是否开启监听配置文件
+        'config_listen_list' => [ // 监听配置文件列表 $dataId, $group, $tenant = null
+            ['database.php','DEFAULT_GROUP','188e48a6-6c98-4563-a76e-e1c70a91e650']
+        ],
     ]
 ];

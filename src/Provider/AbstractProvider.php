@@ -7,9 +7,7 @@
 
 declare(strict_types=1);
 
-
 namespace Tinywan\Nacos\Provider;
-
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -22,7 +20,8 @@ use Tinywan\Nacos\Traits\ErrorMsg;
 
 abstract class AbstractProvider
 {
-    use Authentication, ErrorMsg;
+    use Authentication;
+    use ErrorMsg;
 
     /**
      * @var Nacos
@@ -78,7 +77,7 @@ abstract class AbstractProvider
             $token = $this->issueToken();
             $token && $options[RequestOptions::QUERY]['accessToken'] = $token;
             $response = $this->client()->request($method, $uri, $options);
-        }catch (RequestException $exception){
+        } catch (RequestException $exception) {
             if ($exception->hasResponse()) {
                 if (200 != $exception->getResponse()->getStatusCode()) {
                     return $this->setError(false, $exception->getResponse()->getBody()->getContents());

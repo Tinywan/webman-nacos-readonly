@@ -134,6 +134,23 @@ https://nacos.io/zh-cn/docs/auth.html
 
 ## Other
 
+composer
+```
+composer dumpautoload
+```
+
+phpstan
+```php
+vendor/bin/phpstan analyse src
+```
+
+php-cs-fixer
+```php
+vendor/bin/php-cs-fixer fix src
+```
+
+## Basic
+
 - `__toString()` 方法用于一个类被当成字符串时应怎样回应。例如 echo $obj; 应该显示些什么。
   > 警告：在 PHP 7.4.0 之前不能在 __toString() 方法中抛出异常。这么做会导致致命错误。
 - `__invoke()` 当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用。

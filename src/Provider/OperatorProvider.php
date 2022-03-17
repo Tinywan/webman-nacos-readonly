@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-
 namespace Tinywan\Nacos\Provider;
 
 use GuzzleHttp\Exception\GuzzleException;
