@@ -16,8 +16,6 @@ composer require tinywan/nacos
 
 ### 认证
 
-Docker环境，添加环境变量 `NACOS_AUTH_ENABLE=true`（默认该值为false）
-
 ```php
 use Tinywan\Nacos\Nacos;
 
@@ -25,6 +23,7 @@ $nacos = new Nacos();
 $login = $nacos->auth->login('nacos', 'nacos');
 var_dump($login->getBody()->getContents());
 ```
+> Docker环境，添加环境变量 `NACOS_AUTH_ENABLE=true`（默认该值为false）
 
 #### 认证成功
 
@@ -41,7 +40,7 @@ var_dump($login->getBody()->getContents());
 
 #### 认证失败
 
-403
+抛出 `NacosAuthException` 异常
 
 ### 配置
 
