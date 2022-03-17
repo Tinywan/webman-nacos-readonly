@@ -9,38 +9,41 @@ declare(strict_types=1);
 
 namespace Tinywan\Nacos\Server;
 
-use Tinywan\Nacos\Nacos;
+use Workerman\Connection\AsyncTcpConnection;
 use Workerman\Timer;
+use Workerman\Worker;
 
 class ListenConfigServer
 {
-    public function onWorkerStart($worker)
+    /**
+     * @desc: 方法描述
+     * @param Worker $worker
+     */
+    public function onWorkerStart(Worker $worker)
     {
-        if ($worker) {
-            $config = config('plugin.tinywan.nacos.app.nacos');
-            if ($config['is_config_listen']) {
+        $config = config('plugin.tinywan.nacos.app.nacos');
+        if ($config['is_config_listen']) {
+            Timer::add(1, function () use ($config) {
+                $taskWork = new AsyncTcpConnection('text://127.0.0.1:9511');
                 $listenList = $config['config_listen_list'];
                 if ($listenList) {
-                    $nacos = new Nacos();
-                    Timer::add(10, function () use ($nacos, $listenList) {
-                        foreach ($listenList as $listen) {
-                            $content = $nacos->config->get($listen[0], $listen[1], $listen[2] ?? null);
-                            if (false === $content) {
-                                break;
-                            }
-                            $response = $nacos->config->listen($listen[0], $listen[1], md5($content), $listen[2] ?? null);
-                            if (false === $response) {
-                                break;
-                            }
-                            if ($response) {
-                                $responseArr = json_decode($response, true);
-                                $configFile = config_path() . DIRECTORY_SEPARATOR . $listen[0];
-                                file_put_contents($configFile, "<?php\treturn " . var_export($responseArr, true) . ";");
-                            }
-                        }
-                    });
+                    foreach ($listenList as $listen) {
+                        $taskWork->send(json_encode([
+                            'cmd' => 'listen-config',
+                            'data' => [
+                                'dataId' => $listen[0],
+                                'group' => $listen[1],
+                                'tenant' => $listen[2]
+                            ]
+                        ]));
+                        $taskWork->onMessage = function (AsyncTcpConnection $connection, $result) {
+                            // 有数据更新
+                        };
+                    }
                 }
-            }
+                // 执行异步连接操作。此方法会立刻返回。
+                $taskWork->connect();
+            });
         }
     }
 }
