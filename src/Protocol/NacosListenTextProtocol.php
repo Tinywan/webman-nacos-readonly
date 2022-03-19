@@ -34,6 +34,8 @@ class NacosListenTextProtocol
             if (false === $content) {
                 var_dump( $nacos->config->getMessage());
             }
+            // 和本地缓存文件比较
+            // ???????????????????????????????????????????????/
             // 阻塞数秒
             $response = $nacos->config->listen($dataId, $group,md5($content),$tenant);
             if (false === $response) {
@@ -41,8 +43,12 @@ class NacosListenTextProtocol
             }
             if ($response) {
                 $responseArr = json_decode($response, true);
-                $configFile = config_path() . DIRECTORY_SEPARATOR . $dataId;
-                file_put_contents($configFile, "<?php\treturn " . var_export($responseArr, true) . ";");
+                $snapshotFile = config_path() . DIRECTORY_SEPARATOR . $dataId;
+                $file = new \SplFileInfo($snapshotFile);
+                if (!is_dir($file->getPath())) {
+                    mkdir($file->getPath(), 0777, true);
+                }
+                file_put_contents($snapshotFile, "<?php\t return " . var_export($responseArr, true) . ";");
                 $connection->send($response);
             }
         }

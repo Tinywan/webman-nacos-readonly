@@ -10,7 +10,9 @@ declare(strict_types=1);
 namespace Tinywan\Nacos\Provider;
 
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
+use support\Log;
 
 class ConfigProvider extends AbstractProvider
 {
@@ -28,13 +30,31 @@ class ConfigProvider extends AbstractProvider
      */
     public function get(string $dataId, string $group, ?string $tenant = null)
     {
-        return $this->request('GET', 'nacos/v1/cs/configs', [
-            RequestOptions::QUERY => $this->filter([
+
+
+        try {
+            $options[RequestOptions::QUERY] = [
                 'dataId' => $dataId,
                 'group' => $group,
                 'tenant' => $tenant
-            ]),
-        ]);
+            ];
+            $token = $this->issueToken();
+            $token && $options[RequestOptions::QUERY]['accessToken'] = $token;
+            $response = $this->client()->request('GET', 'nacos/v1/cs/configs', $options);
+            // 当应用程序去访问Nacos动态获取配置源之后，会缓存到本地内存以及磁盘中
+            $config = $response->getBody()->getContents();
+            $cacheRes = LocalCacheConfig::saveSnapshot($dataId,$group,$tenant,$config);
+            Log::info('[nacos] 动态获取配置缓存到本地内存以及磁盘中：'.$cacheRes);
+        } catch (RequestException $exception) {
+            if ($exception->hasResponse()) {
+                if (200 != $exception->getResponse()->getStatusCode()) {
+                    return $this->setError(false, $exception->getResponse()->getBody()->getContents());
+                }
+            }
+            // 读取本地缓存
+            return $this->setError(false, '服务端提示：' . $exception->getMessage());
+        }
+        return $config;
     }
 
     /**
@@ -88,6 +108,7 @@ class ConfigProvider extends AbstractProvider
         // $responseStr = string(28) "database%02DEFAULT_GROUP%01"
         $lines = explode(self::LINE_SEPARATOR, urldecode($responseStr));
         // 遍历发生了变更的配置项
+        $configResponse = '';
         foreach ($lines as $line) {
             if (!empty($line)) {
                 $parts = explode(self::WORD_SEPARATOR, $line);
@@ -99,8 +120,6 @@ class ConfigProvider extends AbstractProvider
                 }
                 // 逐项根据这些配置项获取配置信息
                 $configResponse = $this->nacos->config->get($dataId, $group, $tenant);
-                // 把配置信息保存到CacheData中
-                // $changedContent = $this->nacos->config->get($dataId, $group, $tenant);
             }
         }
         return $configResponse;

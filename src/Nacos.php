@@ -48,7 +48,7 @@ class Nacos
      */
     public function __get($name)
     {
-        if (! isset($name) || ! isset($this->alias[$name])) {
+        if (!isset($name) || !isset($this->alias[$name])) {
             throw new \InvalidArgumentException("{$name} is invalid.");
         }
 

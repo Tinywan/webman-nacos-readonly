@@ -66,4 +66,13 @@ class ListenerSubject implements \SplSubject
             $observer->update($this);
         }
     }
+
+    /**
+     *
+     */
+    public function checkConfigInfo()
+    {
+        // 如果有变化，则触发listener通知
+        $this->notify();
+    }
 }
