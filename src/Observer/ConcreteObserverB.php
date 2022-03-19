@@ -1,6 +1,6 @@
 <?php
 /**
- * @desc ConcreteObserverB
+ * @desc ConcreteObserverB 订阅者 （subscribers）
  * @author Tinywan(ShaoBo Wan)
  * @email 756684177@qq.com
  * @date 2022/3/19 15:16

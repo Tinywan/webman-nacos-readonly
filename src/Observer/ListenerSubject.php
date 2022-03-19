@@ -1,6 +1,6 @@
 <?php
 /**
- * @desc ListenerSubject
+ * @desc ListenerSubject 发布者 （publisher）
  * @author Tinywan(ShaoBo Wan)
  * @email 756684177@qq.com
  * @date 2022/3/19 15:03
