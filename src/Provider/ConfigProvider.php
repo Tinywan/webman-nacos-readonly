@@ -86,23 +86,24 @@ class ConfigProvider extends AbstractProvider
         }
 
         // $responseStr = string(28) "database%02DEFAULT_GROUP%01"
-        $changedContent = '';
         $lines = explode(self::LINE_SEPARATOR, urldecode($responseStr));
+        // 遍历发生了变更的配置项
         foreach ($lines as $line) {
             if (!empty($line)) {
                 $parts = explode(self::WORD_SEPARATOR, $line);
+                $dataId = $parts[0];
+                $group = $parts[1];
+                $tenant = null;
                 if (count($parts) === 3) {
-                    [$dataId, $group, $namespace] = $parts;
-                    $changedContent = $this->nacos->config->get($dataId, $group, $namespace);
-                } elseif (count($parts) === 2) {
-                    [$dataId, $group] = $parts;
-                    $changedContent = $this->nacos->config->get($dataId, $group);
-                } else {
-                    continue;
+                    $tenant = $parts[2];
                 }
+                // 逐项根据这些配置项获取配置信息
+                $configResponse = $this->nacos->config->get($dataId, $group, $tenant);
+                // 把配置信息保存到CacheData中
+                // $changedContent = $this->nacos->config->get($dataId, $group, $tenant);
             }
         }
-        return $changedContent;
+        return $configResponse;
     }
 
     /**
@@ -123,5 +124,14 @@ class ConfigProvider extends AbstractProvider
                 'tenant' => $tenant
             ]),
         ]);
+    }
+
+    /**
+     * 这个方法主要是向服务器端发起检查请求，判断自己本地的配置和服务端的配置是否一致。
+     * （1）首先从cacheDatas集合中找到isUseLocalConfigInfo为false的缓存
+     * （2）把需要检查的配置项，拼接成一个字符串,调用checkUpdateConfigStr进行验证
+     */
+    private function checkUpdateDataIds(){
+
     }
 }

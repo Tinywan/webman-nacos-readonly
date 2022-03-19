@@ -14,5 +14,6 @@ return [
         'config_listen_list' => [ // 监听配置文件列表 $dataId, $group, $tenant = null
             ['database.php','DEFAULT_GROUP','188e48a6-6c98-4563-a76e-e1c70a91e650']
         ],
+        'snapshot' => runtime_path(), // 快照 指定存放配置文件的目录路径
     ]
 ];
