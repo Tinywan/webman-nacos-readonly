@@ -51,7 +51,7 @@ class ConfigProvider extends AbstractProvider
                 if (!is_dir($file->getPath())) {
                     mkdir($file->getPath(), 0777, true);
                 }
-                file_put_contents($snapshotFile, "<?php\t return " . var_export($responseArr, true) . ";");
+                file_put_contents($snapshotFile, "<?php\r\n return " . var_export($responseArr, true) . ";");
             }
         } catch (RequestException $exception) {
             $config = LocalConfigCache::getSnapshot($dataId, $tenant);
@@ -114,14 +114,15 @@ class ConfigProvider extends AbstractProvider
         foreach ($lines as $line) {
             if (!empty($line)) {
                 $parts = explode(self::WORD_SEPARATOR, $line);
-                $dataId = $parts[0];
-                $group = $parts[1];
-                $tenant = null;
                 if (count($parts) === 3) {
-                    $tenant = $parts[2];
+                    [$dataId, $group, $tenant] = $parts;
+                    $configResponse = $this->nacos->config->get($dataId, $group, $tenant);
+                } elseif (count($parts) === 2) {
+                    [$dataId, $group] = $parts;
+                    $configResponse = $this->nacos->config->get($dataId, $group);
+                } else {
+                    continue;
                 }
-                // 逐项根据这些配置项获取配置信息
-                $configResponse = $this->nacos->config->get($dataId, $group, $tenant);
             }
         }
         return $configResponse;
