@@ -25,6 +25,7 @@ class ListenConfigServer
         if ($config['is_config_listen']) {
             Timer::add($config['listen_timer_interval'], function () use ($config) {
                 $taskWork = new AsyncTcpConnection($config['listen_text_address']);
+                // 这里应该遍历缓存目录。而不是读取配置文件
                 $listenList = $config['config_listen_list'];
                 if ($listenList) {
                     foreach ($listenList as $listen) {
