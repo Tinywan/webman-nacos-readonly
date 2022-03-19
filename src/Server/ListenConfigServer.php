@@ -36,12 +36,14 @@ class ListenConfigServer
                                 'tenant' => $listen[2]
                             ]
                         ]));
+                        // 异步获得结果
                         $taskWork->onMessage = function (AsyncTcpConnection $connection, $result) {
-                            // 有数据更新
+                            // echo ' [x] 获取异步配置信息 ...  '.$result, "\n";
+                            // 关闭异步连接
+                            $connection->close();
                         };
                     }
                 }
-                // 执行异步连接操作。此方法会立刻返回。
                 $taskWork->connect();
             });
         }

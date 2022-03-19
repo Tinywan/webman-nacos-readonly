@@ -1,6 +1,7 @@
 <?php
 /**
  * @desc ConfigProvider.php 描述信息
+ * @help https://segmentfault.com/a/1190000041562318
  * @author Tinywan(ShaoBo Wan)
  * @date 2022/3/16 13:39
  */
@@ -13,12 +14,10 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use support\Log;
+use Tinywan\Nacos\Cache\LocalConfigCache;
 
 class ConfigProvider extends AbstractProvider
 {
-    public const WORD_SEPARATOR = "\x02";
-    public const LINE_SEPARATOR = "\x01";
-
     /**
      * @desc: 获取配置
      * @param string $dataId
@@ -30,8 +29,6 @@ class ConfigProvider extends AbstractProvider
      */
     public function get(string $dataId, string $group, ?string $tenant = null)
     {
-
-
         try {
             $options[RequestOptions::QUERY] = [
                 'dataId' => $dataId,
@@ -41,18 +38,23 @@ class ConfigProvider extends AbstractProvider
             $token = $this->issueToken();
             $token && $options[RequestOptions::QUERY]['accessToken'] = $token;
             $response = $this->client()->request('GET', 'nacos/v1/cs/configs', $options);
-            // 当应用程序去访问Nacos动态获取配置源之后，会缓存到本地内存以及磁盘中
             $config = $response->getBody()->getContents();
-            $cacheRes = LocalCacheConfig::saveSnapshot($dataId,$group,$tenant,$config);
-            Log::info('[nacos] 动态获取配置缓存到本地内存以及磁盘中：'.$cacheRes);
-        } catch (RequestException $exception) {
-            if ($exception->hasResponse()) {
-                if (200 != $exception->getResponse()->getStatusCode()) {
-                    return $this->setError(false, $exception->getResponse()->getBody()->getContents());
+            $localConfig = LocalConfigCache::getSnapshot($dataId, $tenant);
+            if (empty($localConfig) || (md5($config) != md5($localConfig))) {
+                // 当应用程序去访问Nacos动态获取配置源之后，会缓存到本地内存以及磁盘中
+                $cacheRes = LocalConfigCache::saveSnapshot($dataId, $tenant, $config);
+                Log::info('[nacos] 动态获取配置缓存到本地内存以及磁盘中：'.$cacheRes);
+
+                $responseArr = json_decode($config, true);
+                $snapshotFile = config_path() . DIRECTORY_SEPARATOR . $dataId;
+                $file = new \SplFileInfo($snapshotFile);
+                if (!is_dir($file->getPath())) {
+                    mkdir($file->getPath(), 0777, true);
                 }
+                file_put_contents($snapshotFile, "<?php\t return " . var_export($responseArr, true) . ";");
             }
-            // 读取本地缓存
-            return $this->setError(false, '服务端提示：' . $exception->getMessage());
+        } catch (RequestException $exception) {
+            $config = LocalConfigCache::getSnapshot($dataId, $tenant);
         }
         return $config;
     }
@@ -150,7 +152,7 @@ class ConfigProvider extends AbstractProvider
      * （1）首先从cacheDatas集合中找到isUseLocalConfigInfo为false的缓存
      * （2）把需要检查的配置项，拼接成一个字符串,调用checkUpdateConfigStr进行验证
      */
-    private function checkUpdateDataIds(){
-
+    private function checkUpdateDataIds()
+    {
     }
 }

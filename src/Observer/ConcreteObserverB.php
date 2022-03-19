@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Tinywan\Nacos\Observer;
 
-
 use SplSubject;
 
 class ConcreteObserverB implements \SplObserver

@@ -23,6 +23,10 @@ abstract class AbstractProvider
     use Authentication;
     use ErrorMsg;
 
+    public const WORD_SEPARATOR = "\x02";
+
+    public const LINE_SEPARATOR = "\x01";
+
     /**
      * @var Nacos
      */

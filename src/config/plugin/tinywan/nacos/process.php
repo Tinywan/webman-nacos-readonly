@@ -6,12 +6,12 @@
  */
 
 use Tinywan\Nacos\Server\ListenConfigServer;
-use \Tinywan\Nacos\Protocol\NacosListenTextProtocol;
+use Tinywan\Nacos\Protocol\ListenTextProtocol;
 
 return [
     // 自定义Text协议
     'listen.text.protocol' => [
-        'handler'=> NacosListenTextProtocol::class,
+        'handler'=> ListenTextProtocol::class,
         'listen' => config('plugin.tinywan.nacos.app.nacos.listen_text_address'),
         'count'  => 10, // 根据配置文件调整
     ],
